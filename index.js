@@ -30,6 +30,13 @@ async function run(){
             res.send(services);
         })
 
+        app.post('/services', async(req, res)=>{
+            const service = req.body;
+            console.log(service);
+            const result = await serviceCollection.insertOne(service);
+            res.send(result);
+        })
+
         app.get('/services', async(req, res)=>{
             const query = {};
             const cursor = serviceCollection.find(query);
