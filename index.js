@@ -64,6 +64,26 @@ async function run(){
             res.send(reviews);
         })
 
+        // Get My Review With Email Query--------------------------------->
+        app.get("/myReview", async(req, res)=>{
+            let query = {};
+            if(req.query.email){
+                query = {
+                    email : req.query.email
+                }
+            }
+            const cursor = reviewCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result)
+        })
+
+        app.delete("/myReview/:id", async(req, res)=>{
+            const id = req.params.id;
+            const query = {_id: ObjectId(id)};
+            const result = await reviewCollection.deleteOne(query);
+            res.send(result);
+        })
+
     }
     finally{
 
