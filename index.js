@@ -20,7 +20,6 @@ const client = new MongoClient(uri, {
 
 
 function verifyJWT(req, res, next) {
-  console.log(req.headers.authorization);
   const authHeader = req.headers.authorization;
   if (!authHeader) {
     return res.status(401).send({ message: "unauthorized Access" });
@@ -84,7 +83,6 @@ async function run(){
         })
 
         app.get("/review", async(req,res)=>{
-           
             let query = {};
             if(req.query.serviceName){
                 query = {
@@ -97,13 +95,12 @@ async function run(){
         })
 
         // Get My Review With Email Query--------------------------------->
-        app.get("/myReview",verifyJWT, async(req, res)=>{
+        app.get("/myReview", verifyJWT, async(req, res)=>{
             const decoded = req.decoded;
             console.log(decoded);
             if (decoded.email !== req.query.email) {
               return res.status(403).send({ message: "Unauthorized Access" });
             }
-            
             
             let query = {};
             if(req.query.email){
@@ -114,6 +111,22 @@ async function run(){
             const cursor = reviewCollection.find(query);
             const result = await cursor.toArray();
             res.send(result)
+        })
+
+        // Update Review Here------------------------------------------------>
+        app.put("/myReview/:id", async(req, res)=>{
+          const id = req.params.id;
+          const query = {_id: ObjectId(id)};
+          const review = req.body;
+          const option = {upsert : true};
+          const updateReview = {
+            $set: {
+              name :review.name,
+              comment : review.comment
+            },
+          };
+          const result = await reviewCollection.updateOne(query, updateReview, option);
+          res.send(result);
         })
 
         app.delete("/myReview/:id", async(req, res)=>{
