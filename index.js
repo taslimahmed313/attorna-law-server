@@ -18,7 +18,7 @@ const client = new MongoClient(uri, {
   serverApi: ServerApiVersion.v1,
 });
 
-
+// JSON Web Token Here------------------------------------------------------------------------->
 function verifyJWT(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
@@ -52,7 +52,7 @@ async function run(){
         app.get('/service', async(req, res)=>{
             const query = {};
             const cursor = serviceCollection.find(query);
-            const services = await cursor.limit(3).toArray();
+            const services = await cursor.sort({"date": -1}).limit(3).toArray();
             res.send(services);
         })
 
@@ -65,7 +65,7 @@ async function run(){
         app.get('/services', async(req, res)=>{
             const query = {};
             const cursor = serviceCollection.find(query);
-            const services = await cursor.toArray();
+            const services = await cursor.sort({"date": -1}).toArray();
             res.send(services);
         })
 
@@ -113,8 +113,15 @@ async function run(){
             res.send(result)
         })
 
+        app.get("/update/:id", async (req, res) => {
+          const id = req.params.id;
+          const query = { _id: ObjectId(id) };
+          const result = await reviewCollection.findOne(query);
+          res.send(result);
+        });
+
         // Update Review Here------------------------------------------------>
-        app.put("/myReview/:id", async(req, res)=>{
+        app.put("/update/:id", async(req, res)=>{
           const id = req.params.id;
           const query = {_id: ObjectId(id)};
           const review = req.body;
@@ -142,13 +149,6 @@ async function run(){
     }
 }
 run().catch(e => console.error(e));
-
-
-
-
-
-
-
 
 app.get('/', (req, res)=>{
     res.send('Personal Portfolio Data Are Coming..........!!!')
