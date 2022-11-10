@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const app = express();
 const port = process.env.PORT || 5000;
 
+// MiddleWare------------------------------------------------------------------>
 app.use(cors());
 app.use(express.json());
 
@@ -49,6 +50,7 @@ async function run(){
             res.send({token});
         })
 
+        // Home Page Display Services-------------------------------------------------->
         app.get('/service', async(req, res)=>{
             const query = {};
             const cursor = serviceCollection.find(query);
@@ -56,6 +58,7 @@ async function run(){
             res.send(services);
         })
 
+        // Show Details Page Display Services---------------------------------------------->
         app.post('/services', async(req, res)=>{
             const service = req.body;
             const result = await serviceCollection.insertOne(service);
@@ -69,6 +72,7 @@ async function run(){
             res.send(services);
         })
 
+        // Uniq Service for Uniq Data------------------------------------------------------------>
         app.get('/services/:id', async(req, res)=>{
             const id = req.params.id;
             const query = {_id: ObjectId(id)};
@@ -82,6 +86,7 @@ async function run(){
             res.send(result);
         })
 
+        // Get Review ServiceName based---------------------------------------------------------->
         app.get("/review", async(req,res)=>{
             let query = {};
             if(req.query.serviceName){
@@ -136,6 +141,7 @@ async function run(){
           res.send(result);
         })
 
+        // Review Delete ---------------------------------------------------->
         app.delete("/myReview/:id", async(req, res)=>{
             const id = req.params.id;
             const query = {_id: ObjectId(id)};
@@ -156,4 +162,4 @@ app.get('/', (req, res)=>{
 app.listen(port, ()=>{
     console.log(`Your Available Port Are-------->${port}`)
 })
-
+ module.exports = app;
