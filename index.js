@@ -19,7 +19,7 @@ const client = new MongoClient(uri, {
   serverApi: ServerApiVersion.v1,
 });
 
-// JSON Web Token Here------------------------------------------------------------------------->
+// JSON Web Token Here---------------------------------------------------------->
 function verifyJWT(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
@@ -50,7 +50,7 @@ async function run(){
             res.send({token});
         })
 
-        // Home Page Display Services-------------------------------------------------->
+        // Home Page Display Services------------------------------------------>
         app.get('/service', async(req, res)=>{
             const query = {};
             const cursor = serviceCollection.find(query);
@@ -58,7 +58,7 @@ async function run(){
             res.send(services);
         })
 
-        // Show Details Page Display Services---------------------------------------------->
+        // Show Details Page Display Services----------------------------------->
         app.post('/services', async(req, res)=>{
             const service = req.body;
             const result = await serviceCollection.insertOne(service);
@@ -72,7 +72,7 @@ async function run(){
             res.send(services);
         })
 
-        // Uniq Service for Uniq Data------------------------------------------------------------>
+        // Uniq Service for Uniq Data----------------------------------------->
         app.get('/services/:id', async(req, res)=>{
             const id = req.params.id;
             const query = {_id: ObjectId(id)};
@@ -86,7 +86,7 @@ async function run(){
             res.send(result);
         })
 
-        // Get Review ServiceName based---------------------------------------------------------->
+        // Get Review ServiceName based------------------------------------->
         app.get("/review", async(req,res)=>{
             let query = {};
             if(req.query.serviceName){
@@ -125,7 +125,7 @@ async function run(){
           res.send(result);
         });
 
-        // Update Review Here------------------------------------------------>
+        // Update Review Here--------------------------------------------->
         app.put("/update/:id", async(req, res)=>{
           const id = req.params.id;
           const query = {_id: ObjectId(id)};
@@ -141,7 +141,7 @@ async function run(){
           res.send(result);
         })
 
-        // Review Delete ---------------------------------------------------->
+        // Review Delete ------------------------------------------------->
         app.delete("/myReview/:id", async(req, res)=>{
             const id = req.params.id;
             const query = {_id: ObjectId(id)};
